@@ -1,29 +1,51 @@
 <div class="container mt-4">
-    <h2>Items</h2>
-  
+    <h2>Películas</h2>
+    
     <!-- Formulario para crear/editar un item -->
-    <form (ngSubmit)="currentItem._id ? updateItem(currentItem._id, currentItem) : createItem(currentItem)">
+    <form (ngSubmit)="currentItem._id ? updateItem(currentItem._id, currentItem) : createItem(currentItem)" class="was-validated">
       <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">Nombre:</label>
         <input type="text" class="form-control" [(ngModel)]="currentItem.name" name="name" required>
+        <div class="invalid-feedback">Por favor, ingresa un nombre.</div>
       </div>
-  
+    
       <div class="form-group">
-        <label for="description">Description:</label>
+        <label for="description">Descripción:</label>
         <input type="text" class="form-control" [(ngModel)]="currentItem.description" name="description" required>
+        <div class="invalid-feedback">Por favor, ingresa una descripción.</div>
       </div>
-  
-      <button type="submit" class="btn btn-primary">{{currentItem._id ? 'Update' : 'Add'}}</button>
+    
+      <div class="form-group">
+        <label for="description">Valoración: (0-10)</label>
+        <div class="col-2">
+          <input type="number" min="0" max="10" class="form-control" [(ngModel)]="currentItem.valoracion" name="valoracion" required onkeydown="return false;">
+          <div class="invalid-feedback">Por favor, ingresa una valoración entre 0 y 10.</div>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="description">Fecha de Estreno:</label>
+        <div class="col-2">
+          <input type="text" class="form-control" [(ngModel)]="currentItem.date_estreno" name="date_estreno" required placeholder="yyyy-mm-dd">
+          <div class="invalid-feedback">Por favor, ingresa una fecha de estreno válida.</div>
+        </div>
+      </div>
+    
+      <br>
+      <button type="submit" class="btn btn-success">{{currentItem._id ? 'Actualizar' : 'Agregar'}}</button>
     </form>
   
+    <div *ngIf="showSuccessMessage" class="alert alert-success">Operación exitosa.</div>
     <hr>
   
     <!-- Lista de items -->
     <table class="table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Description</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Valoracion</th>
+          <th>Fecha de estreno</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -31,9 +53,11 @@
         <tr *ngFor="let item of items">
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
+          <td>{{ item.valoracion }}</td>
+          <td>{{ item.date_estreno }}</td>
           <td>
-            <button class="btn btn-sm btn-primary" (click)="editItem(item._id)">Edit</button>
-            <button class="btn btn-sm btn-danger" (click)="deleteItem(item._id)">Delete</button>
+            <button class="btn btn-sm btn-primary m-sm-3" (click)="editItem(item._id)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="confirmDeleteItem(item._id)">Delete</button>
           </td>
         </tr>
       </tbody>

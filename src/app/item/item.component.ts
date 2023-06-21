@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../item.service';
 
+
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',
@@ -11,6 +12,7 @@ export class ItemComponent implements OnInit {
   currentItem: any = {};
 
   constructor(private itemService: ItemService) { }
+
 
   ngOnInit(): void {
     this.getItems();
@@ -35,6 +37,7 @@ export class ItemComponent implements OnInit {
       .subscribe(() => {
         this.getItems();
         this.currentItem = {};
+        this.showSuccess();
       });
   }
 
@@ -43,6 +46,7 @@ export class ItemComponent implements OnInit {
       .subscribe(() => {
         this.getItems();
         this.currentItem = {};
+        this.showSuccess();
       });
   }
 
@@ -56,4 +60,26 @@ export class ItemComponent implements OnInit {
   editItem(id: string): void {
     this.getItemById(id);
   }
+
+
+  confirmDeleteItem(itemId: string) {
+    if (confirm("¿Estás seguro de que deseas eliminar este elemento?")) {
+      this.itemService.deleteItem(itemId)
+      .subscribe(() => {
+        this.getItems();
+      });
+    }
+  }
+
+  showSuccessMessage: boolean = false;
+
+    showSuccess() {
+      this.showSuccessMessage = true;
+      setTimeout(() => {
+        this.showSuccessMessage = false;
+      }, 3000); // Ocultar el mensaje después de 3 segundos
+    }
+
+
+
 }
